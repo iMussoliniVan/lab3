@@ -29,6 +29,13 @@ public class GornerTableCellRenderer implements TableCellRenderer {
     }
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+        if ((Double) value < 0) {
+            panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        } else if ((Double) value > 0) {
+            panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        } else {
+            panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        }
         String formattedDouble = formatter.format(value);
         label.setText(formattedDouble);
         if (col==1 && needle!=null && needle.equals(formattedDouble)) {
