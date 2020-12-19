@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
     private Double[] coefficients;
     private JFileChooser fileChooser = null;
     private JMenuItem saveToTextMenuItem;
+    private JMenuItem saveToCSVMenuItem;
     private JMenuItem saveToGraphicsMenuItem;
     private JMenuItem searchValueMenuItem;
     private JTextField textFieldFrom;
@@ -27,6 +28,7 @@ public class MainFrame extends JFrame {
     private Box hBoxResult;
     private GornerTableCellRenderer renderer = new GornerTableCellRenderer();
     private GornerTableModel data;
+    private DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance();
 
     public MainFrame(Double[] coefficients) {
         super("Табулирование многочлена на отрезке по схеме Горнера");
@@ -65,6 +67,20 @@ public class MainFrame extends JFrame {
         };
         saveToGraphicsMenuItem = fileMenu.add(saveToGraphicsAction);
         saveToGraphicsMenuItem.setEnabled(false);
+        Action saveToCVSAction = new AbstractAction("Сохранить в CSV файл") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fileChooser == null) {
+                    fileChooser = new JFileChooser();
+                    fileChooser.setCurrentDirectory(new File("C:\\java\\labs\\lab3\\res"));
+                }
+                if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+                    saveToCSVFile(fileChooser.getSelectedFile());
+                }
+            }
+        };
+        saveToCSVMenuItem = fileMenu.add(saveToCVSAction);
+        saveToCSVMenuItem.setEnabled(false);
         Action searchValueAction = new AbstractAction("Найти значение многочлена") {
             public void actionPerformed(ActionEvent event) {
                 String value = JOptionPane.showInputDialog(MainFrame.this, "Введите значение для поиска",
@@ -119,6 +135,7 @@ public class MainFrame extends JFrame {
                     saveToTextMenuItem.setEnabled(true);
                     saveToGraphicsMenuItem.setEnabled(true);
                     searchValueMenuItem.setEnabled(true);
+                    saveToCSVMenuItem.setEnabled(true);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this,
                             "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
@@ -137,6 +154,7 @@ public class MainFrame extends JFrame {
                 saveToTextMenuItem.setEnabled(false);
                 saveToGraphicsMenuItem.setEnabled(false);
                 searchValueMenuItem.setEnabled(false);
+                saveToCSVMenuItem.setEnabled(false);
                 getContentPane().validate();
             }
         });
@@ -190,6 +208,29 @@ public class MainFrame extends JFrame {
             }
             out.close();
         } catch (FileNotFoundException e) {
+        }
+    }
+
+    protected void saveToCSVFile(File selectedFile) {
+        try {
+            Csv.Writer writer = new Csv.Writer(selectedFile);
+            writer.value("Результаты табулирования многочлена по схеме Горнера");
+            writer.newLine();
+            writer.value("Интервал от " + data.getFrom() + " до " + data.getTo() + " с шагом " + data.getStep());
+            writer.newLine();
+            writer.value("Значение X");
+            writer.value("Значение многочлена");
+            writer.value("Наоборот");
+            writer.value("Разница");
+            writer.newLine();
+            for (int i = 0; i < data.getRowCount(); i++) {
+                for (int k = 0; k < data.getColumnCount(); k++) {
+                    writer.value(formatter.format(data.getValueAt(i, k)));
+                }
+                writer.newLine();
+            }
+            writer.close();
+        } catch (Exception ignored) {
         }
     }
 
