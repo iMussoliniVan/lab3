@@ -18,6 +18,7 @@ public class MainFrame extends JFrame {
     private static final int HEIGHT = 500;
     private Double[] coefficients;
     private JFileChooser fileChooser = null;
+    private JMenuItem informationItem;
     private JMenuItem saveToTextMenuItem;
     private JMenuItem saveToGraphicsMenuItem;
     private JMenuItem searchValueMenuItem;
@@ -41,6 +42,28 @@ public class MainFrame extends JFrame {
         menuBar.add(fileMenu);
         JMenu tableMenu = new JMenu("Таблица");
         menuBar.add(tableMenu);
+        JMenu reference = new JMenu("Справка");
+        menuBar.add(reference);
+        Action aboutProgram = new AbstractAction("О программе") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Box information=Box.createVerticalBox();
+                JLabel author = new JLabel("Уткевич Иван");
+                JLabel group = new JLabel("7 группа");
+                JLabel image = new JLabel();
+                image.setIcon(new ImageIcon(new ImageIcon("C:\\java\\labs\\lab3\\res\\mee.jpg")
+                        .getImage().getScaledInstance(500, 500, Image.SCALE_DEFAULT)));
+                information.add(Box.createVerticalGlue());
+                information.add(author);
+                information.add(group);
+                information.add(image);
+                information.add(Box.createVerticalGlue());
+                JOptionPane.showMessageDialog(MainFrame.this,
+                        information, "" + "О программе", JOptionPane.INFORMATION_MESSAGE);
+            }
+        };
+        informationItem = reference.add(aboutProgram);
+        informationItem.setEnabled(true);
         Action saveToTextAction = new AbstractAction("Сохранить в текстовый файл") {
             public void actionPerformed(ActionEvent event) {
                 if (fileChooser == null) {
