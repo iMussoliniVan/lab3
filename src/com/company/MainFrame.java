@@ -20,6 +20,7 @@ public class MainFrame extends JFrame {
     private JFileChooser fileChooser = null;
     private JMenuItem informationItem;
     private JMenuItem saveToTextMenuItem;
+    private JMenuItem searchPtimeNumbMenuItem;
     private JMenuItem saveToGraphicsMenuItem;
     private JMenuItem searchValueMenuItem;
     private JTextField textFieldFrom;
@@ -98,6 +99,14 @@ public class MainFrame extends JFrame {
         };
         searchValueMenuItem = tableMenu.add(searchValueAction);
         searchValueMenuItem.setEnabled(false);
+        Action searchPtimeNumb = new AbstractAction("Найти близкие к простым") {
+            public void actionPerformed(ActionEvent event) {
+                renderer.setNeedle("search");
+                getContentPane().repaint();
+            }
+        };
+        searchPtimeNumbMenuItem = tableMenu.add(searchPtimeNumb);
+        searchPtimeNumbMenuItem.setEnabled(false);
         JLabel labelForFrom = new JLabel("X изменяется на интервале от:");
         textFieldFrom = new JTextField("0.0", 10);
         textFieldFrom.setMaximumSize(textFieldFrom.getPreferredSize());
@@ -142,6 +151,7 @@ public class MainFrame extends JFrame {
                     saveToTextMenuItem.setEnabled(true);
                     saveToGraphicsMenuItem.setEnabled(true);
                     searchValueMenuItem.setEnabled(true);
+                    searchPtimeNumbMenuItem.setEnabled(true);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this,
                             "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа",
@@ -160,6 +170,7 @@ public class MainFrame extends JFrame {
                 saveToTextMenuItem.setEnabled(false);
                 saveToGraphicsMenuItem.setEnabled(false);
                 searchValueMenuItem.setEnabled(false);
+                searchPtimeNumbMenuItem.setEnabled(false);
                 getContentPane().validate();
             }
         });

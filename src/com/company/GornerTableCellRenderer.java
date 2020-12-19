@@ -38,7 +38,10 @@ public class GornerTableCellRenderer implements TableCellRenderer {
         }
         String formattedDouble = formatter.format(value);
         label.setText(formattedDouble);
-        if (col==1 && needle!=null && needle.equals(formattedDouble)) {
+        if (((col == 1 || col == 2) && needle != null && needle.equals(formattedDouble))) {
+            panel.setBackground(Color.RED);
+        } else if (((col == 1 || col == 2) && needle != null && (1 - Math.abs((Double) value % 1) <= 0.1
+                || Math.abs((Double) value % 1) <= 0.1) && needle.equals("search")) && (Double) value % 1 != 0) {
             panel.setBackground(Color.RED);
         } else {
             panel.setBackground(Color.WHITE);
