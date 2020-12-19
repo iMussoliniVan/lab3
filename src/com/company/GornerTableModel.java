@@ -26,21 +26,30 @@ public class GornerTableModel extends AbstractTableModel {
         return step;
     }
     public int getColumnCount() {
-        return 2;
+        return 4;
     }
     public int getRowCount() {
         return new Double(Math.ceil((to-from)/step)).intValue()+1;
     }
     public Object getValueAt(int row, int col) {
-        double x = from + step*row;
+        double x = from + step * row;
         if (col == 0) {
             return x;
-        } else{
+        } else if (col == 1) {
             result[0] = 0.0;
             for (int i = 0; i < coefficients.length; i++) {
                 result[0] += Math.pow(x, coefficients.length - 1 - i) * coefficients[i];
             }
             return result[0];
+        } else if (col == 2) {
+            result[1] = 0.0;
+            int p = coefficients.length - 1;
+            for (int i = 0; i < coefficients.length; i++) {
+                result[1] += Math.pow(x, coefficients.length - 1 - i) * coefficients[p--];
+            }
+            return result[1];
+        } else {
+            return result[1] - result[0];
         }
     }
     public String getColumnName(int col) {
